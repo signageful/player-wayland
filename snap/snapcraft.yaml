@@ -102,6 +102,9 @@ parts:
     plugin: npm
     npm-node-version: 18.12.1
     source: https://github.com/signageful/player.git
+    build-packages:
+      - python
+      - build-essential
     build-environment:
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
     build-snaps:
