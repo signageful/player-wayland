@@ -22,9 +22,9 @@ system-usernames:
 
 apps:
   signageful-player:
-    daemon: simple
-    restart-condition: always
-    restart-delay: 3s
+    # daemon: simple
+    # restart-condition: always
+    # restart-delay: 3s
     command-chain:
       - bin/wayland-launch
       - bin/dbus-launch
