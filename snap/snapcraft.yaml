@@ -9,12 +9,12 @@ description: |
   If you are looking for OSK support, please install the `ubuntu-frame-osk` snap.
 
 grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 architectures:
   - build-on: amd64
   # - build-on: armhf
-  # - build-on: arm64
+  - build-on: arm64
 
 apps:
   signageful-player:
