@@ -170,6 +170,9 @@ parts:
   dbus-launch:
     plugin: dump
     source: dbus
+    organize: 
+      session.conf: etc/dbus-1/session.conf
+      dbus-launch: bin/dbus-launch
     override-prime: |
       snapcraftctl prime
       # replace the SNAP_NAME placeholder with our actual project name
