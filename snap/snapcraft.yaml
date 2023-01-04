@@ -6,6 +6,8 @@ description: |
   This is the Signageful Wayland Player for Ubuntu Core. Make sure to 
   install `ubuntu-frame` snaps to get this snap to work.
 
+  If you are looking for OSK support, please install the `ubuntu-frame-osk` snap.
+
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
@@ -101,8 +103,24 @@ parts:
     source: https://github.com/signageful/player.git
     build-environment:
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
-
+    override-build: |
+      set +u # core20 base does not allow unbound variables !
+      # workaround for build.snapcraft.io builds
+      # https://bugs.launchpad.net/bugs/1886861
+      if [ -n "$http_proxy" ]; then
+        export ELECTRON_GET_USE_PROXY=1
+        export GLOBAL_AGENT_HTTP_PROXY="${http_proxy}"
+        export GLOBAL_AGENT_HTTPS_PROXY="${http_proxy}"
+      fi
       
+      # Replace the default app with the Mir website
+      sed --in-place "s!loadFile('index.html')!loadURL('https://mir-server.io')!" main.js
+      npm install --unsafe-perm true electron-packager
+      electron-packager . --overwrite --platform=linux \
+          --output=release-build --prune=true
+      cp -a ./signageful-player-linux-linux-* $SNAPCRAFT_PART_INSTALL/signageful-player
+      chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-player
+
   wrapper:
     plugin: dump
     source: wrapper
@@ -170,7 +188,7 @@ parts:
   # This ensures that your snap doesn't contain its own copy of the userspace drivers
   cleanup:
     after:
-      - electron-helloworld
+      - player
       - wrapper
       - wayland-launch
       - dbus
