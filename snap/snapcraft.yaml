@@ -13,8 +13,8 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 architectures:
   - build-on: amd64
-  - build-on: armhf
-  - build-on: arm64
+  # - build-on: armhf
+  # - build-on: arm64
 
 apps:
   signageful-player:
@@ -187,7 +187,7 @@ parts:
       sed --in-place "s/%PLUGS%/$PLUGS/g" $SNAPCRAFT_PART_BUILD/bin/setup.sh
       snapcraftctl build
     stage-packages:
-      - inotify-tools
+      - inotify-tool
 
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
   # This ensures that your snap doesn't contain its own copy of the userspace drivers
