@@ -187,7 +187,7 @@ parts:
       sed --in-place "s/%PLUGS%/$PLUGS/g" $SNAPCRAFT_PART_BUILD/bin/setup.sh
       snapcraftctl build
     stage-packages:
-      - inotify-tool
+      - inotify-tools
 
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
   # This ensures that your snap doesn't contain its own copy of the userspace drivers
