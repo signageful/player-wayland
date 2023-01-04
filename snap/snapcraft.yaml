@@ -17,6 +17,9 @@ architectures:
   # - build-on: armhf
   - build-on: arm64
 
+system-usernames:
+  snap_daemon: shared
+
 apps:
   signageful-player:
     daemon: simple
