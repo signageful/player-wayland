@@ -99,10 +99,13 @@ parts:
   # the first part should become the 'app' in the snap, in our case the `player` binary
   # we are using git to pull the source code from the repository
   player:
-    plugin: nil
+    plugin: npm
+    npm-node-version: 18.12.1
     source: https://github.com/signageful/player.git
     build-environment:
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
+    build-snaps:
+      - node/18/stable
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # workaround for build.snapcraft.io builds
@@ -114,11 +117,13 @@ parts:
       fi
       
       # Replace the default app with the Mir website
-      sed --in-place "s!loadFile('index.html')!loadURL('https://mir-server.io')!" main.js
+      # sed --in-place "s!loadFile('index.html')!loadURL('https://mir-server.io')!" main.js
+      npm install --unsafe-perm true
+      # npm run package:linux
       npm install --unsafe-perm true electron-packager
       electron-packager . --overwrite --platform=linux \
           --output=release-build --prune=true
-      cp -a ./signageful-player-linux-linux-* $SNAPCRAFT_PART_INSTALL/signageful-player
+      cp -a ./signageful-player-linux-* $SNAPCRAFT_PART_INSTALL/signageful-player
       chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-player
 
   wrapper:
