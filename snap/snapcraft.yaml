@@ -105,6 +105,9 @@ parts:
     build-packages:
       - python
       - build-essential
+    stage-packages:
+    - libnss3
+    - libnspr4
     build-environment:
       - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
     build-snaps:
@@ -124,6 +127,8 @@ parts:
       npm install --unsafe-perm true
       # npm run package:linux
       npm install --unsafe-perm true electron-packager
+      # let's build the app first
+      npm run build --unsafe-perm true
       electron-packager . --overwrite --platform=linux \
           --output=release-build --prune=true
       cp -a ./signageful-player-linux-* $SNAPCRAFT_PART_INSTALL/signageful-player
