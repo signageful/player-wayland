@@ -122,8 +122,8 @@ parts:
       # Replace the default app with the Mir website
       # sed --in-place "s!loadFile('index.html')!loadURL('https://mir-server.io')!" main.js
       npm install --unsafe-perm true
-      npm run build
-      npm run packager
+      npm run build --unsafe-perm true
+      npm run packager --unsafe-perm true
       # npm run package:linux
       #npm install --unsafe-perm true electron-packager
       #electron-packager . --overwrite --platform=linux \
