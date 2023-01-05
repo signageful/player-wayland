@@ -105,6 +105,7 @@ parts:
     build-packages:
       - python
       - build-essential
+      - g++
     stage-packages:
     - libnss3
     - libnspr4
