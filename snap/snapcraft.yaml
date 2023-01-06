@@ -21,7 +21,7 @@ system-usernames:
   snap_daemon: shared
 
 apps:
-  signageful-player:
+  signageful-client:
     # daemon: simple
     # restart-condition: always
     # restart-delay: 3s
@@ -99,41 +99,13 @@ parts:
   # the first part should become the 'app' in the snap, in our case the `player` binary
   # we are using git to pull the source code from the repository
   player:
-    plugin: npm
-    npm-node-version: 18.12.1
-    source: https://github.com/signageful/player.git
-    build-packages:
-      - python
-      - build-essential
-      - g++
-    stage-packages:
-    - libnss3
-    - libnspr4
-    build-environment:
-      - PATH: "$PATH:$SNAPCRAFT_PART_BUILD/node_modules/.bin"
-    build-snaps:
-      - node/18/stable
+    plugin: nil
+    override-pull: |
+      wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-arm64-1.0.1.zip
     override-build: |
-      set +u # core20 base does not allow unbound variables !
-      # workaround for build.snapcraft.io builds
-      # https://bugs.launchpad.net/bugs/1886861
-      if [ -n "$http_proxy" ]; then
-        export ELECTRON_GET_USE_PROXY=1
-        export GLOBAL_AGENT_HTTP_PROXY="${http_proxy}"
-        export GLOBAL_AGENT_HTTPS_PROXY="${http_proxy}"
-      fi
-      
-      # Replace the default app with the Mir website
-      # sed --in-place "s!loadFile('index.html')!loadURL('https://mir-server.io')!" main.js
-      npm install --unsafe-perm true
-      # npm run package:linux
-      npm install --unsafe-perm true electron-packager
-      # let's build the app first
-      npm run build --unsafe-perm true
-      electron-packager . --overwrite --platform=linux \
-          --output=release-build --prune=true
-      cp -a ./signageful-player-linux-* $SNAPCRAFT_PART_INSTALL/signageful-player
-      chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-player
+      unzip signageful-client-linux-$SNAP_ARCH-1.0.1.zip
+      cp -a ./signageful-client-linux-* $SNAPCRAFT_PART_INSTALL/signageful-client
+      chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-client
 
   wrapper:
     plugin: dump

@@ -4,7 +4,7 @@ if grep -q "Pi 4" /proc/cpuinfo; then
   EXTRAOPTS="--disable-gpu"
 fi
 
-exec $SNAP/signageful-player/signageful-player \
+exec $SNAP/signageful-client/signageful-client \
 	--enable-features=UseOzonePlatform \
 	--ozone-platform=wayland \
 	--disable-dev-shm-usage \
