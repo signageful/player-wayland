@@ -103,12 +103,24 @@ parts:
     stage-packages:
       - wget
       - unzip
-    override-pull: |
-      wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-arm64-1.0.1.zip
+    # override-pull: |
+    #   wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-arm64-1.0.1.zip
     override-build: |
-      unzip signageful-client-linux-$SNAP_ARCH-1.0.1.zip
-      ls -lah $SNAPCRAFT_PART_INSTALL
-      cp -a ./signageful-client-linux-* $SNAPCRAFT_PART_INSTALL/signageful-client
+      set +u # core20 base does not allow unbound variables !
+      # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
+      # if SNAP_ARCH is arm64 set it to arm64
+      if [ "$SNAP_ARCH" = "amd64" ]; then
+        export ARCH="x64"
+      elif [ "$SNAP_ARCH" = "arm64" ]; then
+        export ARCH="arm64"
+      fi
+
+      wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-$ARCH-1.0.1.zip
+      ls -lah
+
+      unzip signageful-client-linux-$ARCH-1.0.1.zip
+      rm signageful-client-linux-$ARCH-1.0.1.zip
+      cp -a ./signageful-client-linux-$ARCH $SNAPCRAFT_PART_INSTALL/signageful-client
       chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-client
 
   wrapper:
