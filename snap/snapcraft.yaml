@@ -1,5 +1,5 @@
 name: signageful-player-wayland # you probably want to 'snapcraft register <name>'
-version: '0.1.5' # just for humans, typically '1.2+git' or '1.3.2'
+version: '1.6.0' # just for humans, typically '1.2+git' or '1.3.2'
 summary: Provides the Signageful Player for Wayland
 description: |
   This is the Signageful Wayland Player for Ubuntu Core. Make sure to 
@@ -103,8 +103,6 @@ parts:
     stage-packages:
       - wget
       - unzip
-    # override-pull: |
-    #   wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-arm64-1.0.1.zip
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
@@ -115,11 +113,11 @@ parts:
         export ARCH="arm64"
       fi
 
-      wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-$ARCH-1.0.1.zip
+      wget https://github.com/signageful/client/releases/download/v$SNAPCRAFT_PROJECT_VERSION/signageful-client-linux-$ARCH-$SNAPCRAFT_PROJECT_VERSION.zip
       ls -lah
 
-      unzip signageful-client-linux-$ARCH-1.0.1.zip
-      rm signageful-client-linux-$ARCH-1.0.1.zip
+      unzip signageful-client-linux-$ARCH-$SNAPCRAFT_PROJECT_VERSION.zip
+      rm signageful-client-linux-$ARCH-$SNAPCRAFT_PROJECT_VERSION.zip
       cp -a ./signageful-client-linux-$ARCH $SNAPCRAFT_PART_INSTALL/signageful-client
       chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-client
 
