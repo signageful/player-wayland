@@ -100,6 +100,8 @@ parts:
   # we are using git to pull the source code from the repository
   player:
     plugin: nil
+    stage-packages:
+      - wget
     override-pull: |
       wget https://github.com/signageful/client/releases/download/v1.1.1/signageful-client-linux-arm64-1.0.1.zip
     override-build: |
