@@ -1,25 +1,17 @@
 name: signageful-player-wayland # you probably want to 'snapcraft register <name>'
 version: '1.6.0' # just for humans, typically '1.2+git' or '1.3.2'
 summary: Provides the Signageful Player for Wayland
-description: |
-  This is the Signageful Wayland Player for Ubuntu Core. Make sure to 
-  install `ubuntu-frame` snaps to get this snap to work.
-
-  If you are looking for OSK support, please install the `ubuntu-frame-osk` snap.
-
+description: "This is the Signageful Wayland Player for Ubuntu Core. Make sure to \ninstall `ubuntu-frame` snaps to get this snap to work.\n\nIf you are looking for OSK support, please install the `ubuntu-frame-osk` snap.\n"
 base: core20 # the base snap is the execution environment for this snap
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 compression: lzo
-
 architectures:
   - build-on: amd64
   # - build-on: armhf
   - build-on: arm64
-
 system-usernames:
   snap_daemon: shared
-
 apps:
   signageful-client:
     # daemon: simple
@@ -43,8 +35,6 @@ apps:
       XDG_DATA_DIRS: $SNAP/usr/share
       GTK_USE_PORTAL: 0
       GDK_GL: gles
-
-
 # This is one of four snippets that relate to providing the userspace graphics needed by your application.
 # You can treat this as "magic" so long as you don't need to make changes.
 # On the Mir discourse forum there's a lot more detail on [the graphics-core20 Snap interface](https://discourse.ubuntu.com/t/the-graphics-core20-snap-interface/23000) and it's use.
@@ -53,28 +43,26 @@ plugs:
     interface: content
     target: $SNAP/graphics
     default-provider: mesa-core20
-
 environment:
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
-  LD_LIBRARY_PATH:    $SNAP/graphics/lib
+  LD_LIBRARY_PATH: $SNAP/graphics/lib
   LIBGL_DRIVERS_PATH: $SNAP/graphics/dri
   LIBVA_DRIVERS_PATH: $SNAP/graphics/dri
   __EGL_VENDOR_LIBRARY_DIRS: $SNAP/graphics/glvnd/egl_vendor.d
   # Other, generally useful environment settings...
   # XDG config
-  XDG_CACHE_HOME:  $SNAP_USER_COMMON/.cache
+  XDG_CACHE_HOME: $SNAP_USER_COMMON/.cache
   XDG_CONFIG_HOME: $SNAP_USER_DATA/.config
   XDG_CONFIG_DIRS: $SNAP/etc/xdg
   # XKB config
   XKB_CONFIG_ROOT: $SNAP/usr/share/X11/xkb
-
 # The `layout` ensures that files can be found by applications where they are expected by the toolkit or application.
 layout:
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
   # These paths (/usr/share/libdrm and /usr/share/drirc.d) are hardcoded in mesa.
-  /usr/share/libdrm:  # Needed by mesa-core20 on AMD GPUs
+  /usr/share/libdrm: # Needed by mesa-core20 on AMD GPUs
     bind: $SNAP/graphics/libdrm
-  /usr/share/drirc.d:  # Used by mesa-core20 for app specific workarounds
+  /usr/share/drirc.d: # Used by mesa-core20 for app specific workarounds
     bind: $SNAP/graphics/drirc.d
   # Other, generally useful paths
   /usr/share/fonts:
@@ -94,7 +82,6 @@ layout:
     bind: $SNAP/usr/share/mime
   /etc/gtk-3.0:
     bind: $SNAP/etc/gtk-3.0
-
 parts:
   # the first part should become the 'app' in the snap, in our case the `player` binary
   # we are using git to pull the source code from the repository
@@ -103,6 +90,9 @@ parts:
     stage-packages:
       - wget
       - unzip
+    build-packages:
+      - libnss3
+      - libnspr4
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
@@ -120,13 +110,11 @@ parts:
       rm signageful-client-linux-$ARCH-$SNAPCRAFT_PROJECT_VERSION.zip
       cp -a ./signageful-client-linux-$ARCH $SNAPCRAFT_PART_INSTALL/signageful-client
       chmod a+rx $SNAPCRAFT_PART_INSTALL/signageful-client
-
   wrapper:
     plugin: dump
     source: wrapper
     organize:
       wrapper.sh: usr/bin/wrapper
-  
   gsettings+pixbuf:
     plugin: nil
     build-packages:
@@ -136,6 +124,7 @@ parts:
     override-build: |
       # Update mime database
       update-mime-database ${SNAPCRAFT_PART_INSTALL}/usr/share/mime
+
     stage-packages:
       - librsvg2-common
       - gsettings-desktop-schemas
@@ -149,7 +138,6 @@ parts:
       QUERY_LOADERS=/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders
       GDK_PIXBUF_MODULEDIR=${LOADERS_PATH} ${QUERY_LOADERS} > ${LOADERS_PATH}/../loaders.cache
       sed s!$SNAPCRAFT_PRIME!!g --in-place ${LOADERS_PATH}/../loaders.cache
-
   immodules:
     plugin: nil
     build-packages:
@@ -158,21 +146,19 @@ parts:
       snapcraftctl build
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/gtk-3.0/3.0.0/
       /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/libgtk-3-0/gtk-query-immodules-3.0 > ${SNAPCRAFT_PART_INSTALL}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/gtk-3.0/3.0.0/immodules.cache
-
   # Because Bomber won't run without a session dbus, and this isn't available to daemons on core
   # (there is no "session") we need to include a dbus session in the snap.
   # The `source: dbus` contains a script and configuration file for running `dbus-run-session`.
   dbus-launch:
     plugin: dump
     source: dbus
-    organize: 
+    organize:
       session.conf: etc/dbus-1/session.conf
       dbus-launch: bin/dbus-launch
     override-prime: |
       snapcraftctl prime
       # replace the SNAP_NAME placeholder with our actual project name
       sed -i "s/SNAP_NAME/$SNAPCRAFT_PROJECT_NAME/" $SNAPCRAFT_PRIME/etc/dbus-1/session.conf
-
   # Some utility scripts for setting up the Wayland environment
   wayland-launch:
     plugin: dump
@@ -186,7 +172,6 @@ parts:
       snapcraftctl build
     stage-packages:
       - inotify-tools
-
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
   # This ensures that your snap doesn't contain its own copy of the userspace drivers
   cleanup:
@@ -198,7 +183,7 @@ parts:
       - gsettings+pixbuf
       - immodules
     plugin: nil
-    build-snaps: [ mesa-core20 ]
+    build-snaps: [mesa-core20]
     override-prime: |
       set -eux
       cd /snap/mesa-core20/current/egl/lib
