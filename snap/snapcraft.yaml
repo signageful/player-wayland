@@ -35,14 +35,20 @@ apps:
       XDG_DATA_DIRS: $SNAP/usr/share
       GTK_USE_PORTAL: 0
       GDK_GL: gles
+
 # This is one of four snippets that relate to providing the userspace graphics needed by your application.
 # You can treat this as "magic" so long as you don't need to make changes.
 # On the Mir discourse forum there's a lot more detail on [the graphics-core20 Snap interface](https://discourse.ubuntu.com/t/the-graphics-core20-snap-interface/23000) and it's use.
 plugs:
+  # Auto-connected
+  wayland:
+  audio-playback:
+  hardware-observe:
   graphics-core20:
     interface: content
     target: $SNAP/graphics
     default-provider: mesa-core20
+  
 environment:
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
   LD_LIBRARY_PATH: $SNAP/graphics/lib
@@ -90,7 +96,6 @@ parts:
     stage-packages:
       - wget
       - unzip
-    build-packages:
       - libnss3
       - libnspr4
     override-build: |
