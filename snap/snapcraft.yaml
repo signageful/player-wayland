@@ -10,8 +10,10 @@ architectures:
   - build-on: amd64
   # - build-on: armhf
   - build-on: arm64
+
 system-usernames:
   snap_daemon: shared
+
 apps:
   signageful-client:
     daemon: simple
@@ -62,6 +64,7 @@ environment:
   XDG_CONFIG_DIRS: $SNAP/etc/xdg
   # XKB config
   XKB_CONFIG_ROOT: $SNAP/usr/share/X11/xkb
+
 # The `layout` ensures that files can be found by applications where they are expected by the toolkit or application.
 layout:
   # This is one of four snippets that relate to providing the userspace graphics needed by your application.
@@ -88,6 +91,7 @@ layout:
     bind: $SNAP/usr/share/mime
   /etc/gtk-3.0:
     bind: $SNAP/etc/gtk-3.0
+
 parts:
   # the first part should become the 'app' in the snap, in our case the `player` binary
   # we are using git to pull the source code from the repository
