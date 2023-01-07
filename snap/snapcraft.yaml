@@ -93,6 +93,11 @@ parts:
   # we are using git to pull the source code from the repository
   player:
     plugin: nil
+    # things that are needed to BUILD the application
+    build-packages:
+      - wget
+      - unzip
+    # things that are needed to RUN the application
     stage-packages:
       - wget
       - unzip
