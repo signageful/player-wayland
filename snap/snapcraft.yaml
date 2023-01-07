@@ -25,7 +25,6 @@ apps:
     command: usr/bin/wrapper
     plugs:
       - audio-playback
-      - browser-support
       - hardware-observe
       - network
       - network-bind
