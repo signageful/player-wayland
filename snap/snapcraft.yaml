@@ -99,10 +99,8 @@ parts:
       - unzip
     # things that are needed to RUN the application
     stage-packages:
-      - wget
-      - unzip
-      - libnss3
-      - libnspr4
+     - libnss3
+     - libnspr4
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
