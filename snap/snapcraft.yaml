@@ -110,6 +110,8 @@ parts:
      - libxtst6
      - libnss3
      - libnspr4
+     - libatk1.0-0
+     - libatk-bridge2.0-0
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
