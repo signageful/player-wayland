@@ -14,7 +14,7 @@ system-usernames:
   snap_daemon: shared
 apps:
   signageful-client:
-    # daemon: simple
+    daemon: simple
     # restart-condition: always
     # restart-delay: 3s
     command-chain:
@@ -99,6 +99,12 @@ parts:
       - unzip
     # things that are needed to RUN the application
     stage-packages:
+     # These are required for Electron
+     - libasound2
+     - libgconf-2-4
+     - libx11-xcb1
+     - libxss1
+     - libxtst6
      - libnss3
      - libnspr4
     override-build: |
