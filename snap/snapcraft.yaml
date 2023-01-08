@@ -1,5 +1,5 @@
 name: signageful-player-wayland # you probably want to 'snapcraft register <name>'
-version: '1.7.0' # just for humans, typically '1.2+git' or '1.3.2'
+version: '1.7.1' # just for humans, typically '1.2+git' or '1.3.2'
 summary: Provides the Signageful Player for Wayland
 description: "This is the Signageful Wayland Player for Ubuntu Core. Make sure to \ninstall `ubuntu-frame` snaps to get this snap to work.\n\nIf you are looking for OSK support, please install the `ubuntu-frame-osk` snap.\n"
 base: core20 # the base snap is the execution environment for this snap
