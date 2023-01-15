@@ -26,6 +26,7 @@ apps:
     plugs:
       - audio-playback
       - hardware-observe
+      - power-control # added for powerMonitor
       - network
       - network-bind
       - opengl
