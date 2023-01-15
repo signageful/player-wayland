@@ -122,7 +122,6 @@ parts:
      - libgtk-3-0
      - libcap2
      - libnotify4
-     - xprintidle
     override-build: |
       set +u # core20 base does not allow unbound variables !
       # set variable $ARCH from $SNAP_ARCH, if SNAP_ARCH is amd64 set it to x64
