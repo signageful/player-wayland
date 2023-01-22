@@ -117,6 +117,7 @@ parts:
       - wget
       - unzip
     override-build: |
+      set +u # core20 base does not allow unbound variables !
       ## oposite of player
       if [ "$SNAP_ARCH" = "x64" ]; then
         export ARCH="amd64"
