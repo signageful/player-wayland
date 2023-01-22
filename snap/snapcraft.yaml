@@ -123,8 +123,8 @@ parts:
       elif [ "$SNAP_ARCH" = "arm64" ]; then
         export ARCH="arm64"
       fi
-      wget https://github.com/signageful/client/releases/download/v$SNAPCRAFT_PROJECT_VERSION/sig-monitor_linux_$SNAP_ARCH.tar.gz
-      tar -zxvf sig-monitor_linux_$SNAP_ARCH.tar.gz
+      wget https://github.com/signageful/client/releases/download/v$SNAPCRAFT_PROJECT_VERSION/sig-monitor_linux_$ARCH.tar.gz
+      tar -zxvf sig-monitor_linux_$ARCH.tar.gz
  
       mkdir $SNAPCRAFT_PART_INSTALL/bin
       mv ./sig-monitor $SNAPCRAFT_PART_INSTALL/bin/sig-monitor
