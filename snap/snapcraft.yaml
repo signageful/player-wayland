@@ -117,6 +117,12 @@ parts:
       - wget
       - unzip
     override-build: |
+      ## oposite of player
+      if [ "$SNAP_ARCH" = "x64" ]; then
+        export ARCH="amd64"
+      elif [ "$SNAP_ARCH" = "arm64" ]; then
+        export ARCH="arm64"
+      fi
       wget https://github.com/signageful/client/releases/download/v$SNAPCRAFT_PROJECT_VERSION/sig-monitor_linux_$SNAP_ARCH.tar.gz
       tar -zxvf sig-monitor_linux_$SNAP_ARCH.tar.gz
  
