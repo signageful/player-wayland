@@ -1,5 +1,5 @@
 name: signageful-player-wayland # you probably want to 'snapcraft register <name>'
-version: '1.8.3' # just for humans, typically '1.2+git' or '1.3.2'
+version: '1.9.3' # just for humans, typically '1.2+git' or '1.3.2'
 summary: Provides the Signageful Player for Wayland
 description: "This is the Signageful Wayland Player for Ubuntu Core. Make sure to \ninstall `ubuntu-frame` snaps to get this snap to work.\n\nIf you are looking for OSK support, please install the `ubuntu-frame-osk` snap.\n"
 base: core20 # the base snap is the execution environment for this snap
@@ -15,6 +15,19 @@ system-usernames:
   snap_daemon: shared
 
 apps:
+  sig-monitor:
+    command: bin/sig-monitor
+    daemon: simple
+    plugs:
+      - home
+      - network
+      - hardware-observe
+      - mount-observe
+      - network-control
+      - network-bind
+      - process-control
+      - system-observe
+      - daemon-notify
   signageful-client:
     daemon: simple
     # restart-condition: always
@@ -97,6 +110,19 @@ layout:
     bind: $SNAP/etc/gtk-3.0
 
 parts:
+  sig-monitor:
+    plugin: nil
+    # things that are needed to BUILD the application
+    build-packages:
+      - wget
+      - unzip
+    override-build: |
+      wget https://github.com/signageful/client/releases/download/v$SNAPCRAFT_PROJECT_VERSION/sig-monitor_linux_$SNAP_ARCH.tar.gz
+      tar -zxvf sig-monitor_linux_$SNAP_ARCH.tar.gz
+ 
+      mkdir $SNAPCRAFT_PART_INSTALL/bin
+      mv ./sig-monitor $SNAPCRAFT_PART_INSTALL/bin/sig-monitor
+      chmod a+rx $SNAPCRAFT_PART_INSTALL/bin/sig-monitor
   # the first part should become the 'app' in the snap, in our case the `player` binary
   # we are using git to pull the source code from the repository
   player:
